@@ -481,6 +481,11 @@ h2 { font-size: 2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--primary
   color: var(--primary);
   border-bottom: 4px solid var(--primary);
 }
+.slot-gap { width: 18px; }
+/* Długie słowa (np. „dining room”) mieszczą się w jednej linii */
+.slots.long { flex-wrap: nowrap; gap: 4px; }
+.slots.long .slot { width: 24px; font-size: 1.35rem; }
+.slots.long .slot-gap { width: 12px; }
 .slot.fixed { color: var(--muted); border-color: var(--muted); }
 .task.correct .slot { color: var(--good); border-color: var(--good); }
 .task.wrong .slot { color: var(--bad); border-color: var(--bad); }
@@ -493,6 +498,7 @@ h2 { font-size: 2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--primary
   color: var(--primary);
   border-bottom: 4px dashed var(--primary);
   letter-spacing: 2px;
+  white-space: pre;
 }
 .typed::after { content: "|"; color: var(--muted); animation: blink 1s steps(1) infinite; margin-left: 2px; }
 .task.correct .typed { color: var(--good); border-color: var(--good); }
@@ -558,6 +564,7 @@ h2 { font-size: 2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--primary
 .qkey:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,.15); }
 .qkey.wide { flex: 1.6; max-width: 76px; }
 .qkey.del { background: #ffeaa7; }
+.qkey.space { flex: none; width: 60%; max-width: 260px; font-size: 1rem; color: var(--muted); }
 .qkey.ok { background: var(--good); color: #fff; box-shadow: 0 4px 0 #00826a; }
 
 /* ================= SŁÓWKA Z RUNDY ================= */

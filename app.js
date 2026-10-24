@@ -20,282 +20,27 @@ const roundPoints = correct => ROUND_POINTS.find(r => correct >= r.min).pts;
 
 /* ===== BANK SŁÓWEK ===== */
 
-// Nazwy kategorii (po polsku).
-const CATS = {
-  animals: 'zwierzątka', colors: 'kolory', numbers: 'liczby 1–10', numbers2: 'liczby 11–20',
-  fruitveg: 'owoce i warzywa', family: 'rodzina', body: 'ciało', toys: 'zabawki',
-  food: 'jedzenie', clothes: 'ubrania', weather: 'pogoda', wild: 'dzikie zwierzęta',
-  home: 'dom', school: 'szkoła', transport: 'pojazdy', verbs: 'czynności',
-};
+// Słówka z podręcznika: Picture Dictionary – Unit 1 (dom).
+const CATS = { rooms: 'pomieszczenia', things: 'w domu' };
 
-// Obrazek: emoji, kolor (color) albo liczba (num).
 const WORDS = [
-  // Zwierzątka (domowe i z wiejskiego podwórka)
-  { en: 'cat', pl: 'kot', emoji: '🐱', cat: 'animals' },
-  { en: 'dog', pl: 'pies', emoji: '🐶', cat: 'animals' },
-  { en: 'cow', pl: 'krowa', emoji: '🐮', cat: 'animals' },
-  { en: 'pig', pl: 'świnia', emoji: '🐷', cat: 'animals' },
-  { en: 'horse', pl: 'koń', emoji: '🐴', cat: 'animals' },
-  { en: 'sheep', pl: 'owca', emoji: '🐑', cat: 'animals' },
-  { en: 'duck', pl: 'kaczka', emoji: '🦆', cat: 'animals' },
-  { en: 'chicken', pl: 'kura', emoji: '🐔', cat: 'animals' },
-  { en: 'mouse', pl: 'mysz', emoji: '🐭', cat: 'animals' },
-  { en: 'rabbit', pl: 'królik', emoji: '🐰', cat: 'animals' },
-  { en: 'fish', pl: 'ryba', emoji: '🐟', cat: 'animals' },
-  { en: 'bird', pl: 'ptak', emoji: '🐦', cat: 'animals' },
-  { en: 'frog', pl: 'żaba', emoji: '🐸', cat: 'animals' },
-  { en: 'goat', pl: 'koza', emoji: '🐐', cat: 'animals' },
-  { en: 'hamster', pl: 'chomik', emoji: '🐹', cat: 'animals' },
+  // Pomieszczenia
+  { en: 'bathroom', pl: 'łazienka', emoji: '🛁', cat: 'rooms' },
+  { en: 'dining room', pl: 'jadalnia', emoji: '🍽️', cat: 'rooms' },
+  { en: 'kitchen', pl: 'kuchnia', emoji: '🧑‍🍳', cat: 'rooms' },
+  { en: 'toilet', pl: 'toaleta', emoji: '🚽', cat: 'rooms' },
+  { en: 'garage', pl: 'garaż', emoji: '🚗', cat: 'rooms' },
+  { en: 'bedroom', pl: 'sypialnia', emoji: '🛌', cat: 'rooms' },
+  { en: 'hall', pl: 'przedpokój', emoji: '🚪', cat: 'rooms' },
+  { en: 'living room', pl: 'salon', emoji: '📺', cat: 'rooms' },
 
-  // Kolory
-  { en: 'red', pl: 'czerwony', color: '#e74c3c', cat: 'colors' },
-  { en: 'blue', pl: 'niebieski', color: '#0984e3', cat: 'colors' },
-  { en: 'green', pl: 'zielony', color: '#00b84f', cat: 'colors' },
-  { en: 'yellow', pl: 'żółty', color: '#ffd32a', cat: 'colors' },
-  { en: 'orange', pl: 'pomarańczowy', color: '#ff8c1a', cat: 'colors' },
-  { en: 'purple', pl: 'fioletowy', color: '#8e44ad', cat: 'colors' },
-  { en: 'pink', pl: 'różowy', color: '#ff7eb6', cat: 'colors' },
-  { en: 'brown', pl: 'brązowy', color: '#8d5524', cat: 'colors' },
-  { en: 'black', pl: 'czarny', color: '#1e1e1e', cat: 'colors' },
-  { en: 'white', pl: 'biały', color: '#ffffff', cat: 'colors' },
-  { en: 'grey', pl: 'szary', color: '#95a5a6', cat: 'colors' },
-
-  // Liczby 1–10
-  { en: 'one', pl: 'jeden', num: 1, cat: 'numbers' },
-  { en: 'two', pl: 'dwa', num: 2, cat: 'numbers' },
-  { en: 'three', pl: 'trzy', num: 3, cat: 'numbers' },
-  { en: 'four', pl: 'cztery', num: 4, cat: 'numbers' },
-  { en: 'five', pl: 'pięć', num: 5, cat: 'numbers' },
-  { en: 'six', pl: 'sześć', num: 6, cat: 'numbers' },
-  { en: 'seven', pl: 'siedem', num: 7, cat: 'numbers' },
-  { en: 'eight', pl: 'osiem', num: 8, cat: 'numbers' },
-  { en: 'nine', pl: 'dziewięć', num: 9, cat: 'numbers' },
-  { en: 'ten', pl: 'dziesięć', num: 10, cat: 'numbers' },
-
-  // Liczby 11–20
-  { en: 'eleven', pl: 'jedenaście', num: 11, cat: 'numbers2' },
-  { en: 'twelve', pl: 'dwanaście', num: 12, cat: 'numbers2' },
-  { en: 'thirteen', pl: 'trzynaście', num: 13, cat: 'numbers2' },
-  { en: 'fourteen', pl: 'czternaście', num: 14, cat: 'numbers2' },
-  { en: 'fifteen', pl: 'piętnaście', num: 15, cat: 'numbers2' },
-  { en: 'sixteen', pl: 'szesnaście', num: 16, cat: 'numbers2' },
-  { en: 'seventeen', pl: 'siedemnaście', num: 17, cat: 'numbers2' },
-  { en: 'eighteen', pl: 'osiemnaście', num: 18, cat: 'numbers2' },
-  { en: 'nineteen', pl: 'dziewiętnaście', num: 19, cat: 'numbers2' },
-  { en: 'twenty', pl: 'dwadzieścia', num: 20, cat: 'numbers2' },
-
-  // Owoce i warzywa
-  { en: 'apple', pl: 'jabłko', emoji: '🍎', cat: 'fruitveg' },
-  { en: 'banana', pl: 'banan', emoji: '🍌', cat: 'fruitveg' },
-  { en: 'pear', pl: 'gruszka', emoji: '🍐', cat: 'fruitveg' },
-  { en: 'lemon', pl: 'cytryna', emoji: '🍋', cat: 'fruitveg' },
-  { en: 'grapes', pl: 'winogrona', emoji: '🍇', cat: 'fruitveg' },
-  { en: 'strawberry', pl: 'truskawka', emoji: '🍓', cat: 'fruitveg' },
-  { en: 'cherry', pl: 'czereśnia', emoji: '🍒', cat: 'fruitveg' },
-  { en: 'watermelon', pl: 'arbuz', emoji: '🍉', cat: 'fruitveg' },
-  { en: 'pineapple', pl: 'ananas', emoji: '🍍', cat: 'fruitveg' },
-  { en: 'peach', pl: 'brzoskwinia', emoji: '🍑', cat: 'fruitveg' },
-  { en: 'coconut', pl: 'kokos', emoji: '🥥', cat: 'fruitveg' },
-  { en: 'carrot', pl: 'marchewka', emoji: '🥕', cat: 'fruitveg' },
-  { en: 'potato', pl: 'ziemniak', emoji: '🥔', cat: 'fruitveg' },
-  { en: 'tomato', pl: 'pomidor', emoji: '🍅', cat: 'fruitveg' },
-  { en: 'cucumber', pl: 'ogórek', emoji: '🥒', cat: 'fruitveg' },
-  { en: 'corn', pl: 'kukurydza', emoji: '🌽', cat: 'fruitveg' },
-  { en: 'onion', pl: 'cebula', emoji: '🧅', cat: 'fruitveg' },
-  { en: 'mushroom', pl: 'grzyb', emoji: '🍄', cat: 'fruitveg' },
-  { en: 'broccoli', pl: 'brokuł', emoji: '🥦', cat: 'fruitveg' },
-
-  // Rodzina
-  { en: 'mum', pl: 'mama', emoji: '👩', cat: 'family' },
-  { en: 'dad', pl: 'tata', emoji: '👨', cat: 'family' },
-  { en: 'baby', pl: 'dzidziuś', emoji: '👶', cat: 'family' },
-  { en: 'boy', pl: 'chłopiec', emoji: '👦', cat: 'family' },
-  { en: 'girl', pl: 'dziewczynka', emoji: '👧', cat: 'family' },
-  { en: 'grandma', pl: 'babcia', emoji: '👵', cat: 'family' },
-  { en: 'grandpa', pl: 'dziadek', emoji: '👴', cat: 'family' },
-  { en: 'family', pl: 'rodzina', emoji: '👨‍👩‍👧', cat: 'family' },
-
-  // Ciało
-  { en: 'eye', pl: 'oko', emoji: '👁️', cat: 'body' },
-  { en: 'ear', pl: 'ucho', emoji: '👂', cat: 'body' },
-  { en: 'nose', pl: 'nos', emoji: '👃', cat: 'body' },
-  { en: 'mouth', pl: 'usta', emoji: '👄', cat: 'body' },
-  { en: 'tongue', pl: 'język', emoji: '👅', cat: 'body' },
-  { en: 'tooth', pl: 'ząb', emoji: '🦷', cat: 'body' },
-  { en: 'hand', pl: 'ręka', emoji: '✋', cat: 'body' },
-  { en: 'finger', pl: 'palec', emoji: '☝️', cat: 'body' },
-  { en: 'arm', pl: 'ramię', emoji: '💪', cat: 'body' },
-  { en: 'leg', pl: 'noga', emoji: '🦵', cat: 'body' },
-  { en: 'foot', pl: 'stopa', emoji: '🦶', cat: 'body' },
-  { en: 'heart', pl: 'serce', emoji: '❤️', cat: 'body' },
-  { en: 'brain', pl: 'mózg', emoji: '🧠', cat: 'body' },
-  { en: 'bone', pl: 'kość', emoji: '🦴', cat: 'body' },
-
-  // Zabawki
-  { en: 'ball', pl: 'piłka', emoji: '⚽', cat: 'toys' },
-  { en: 'teddy', pl: 'miś', emoji: '🧸', cat: 'toys' },
-  { en: 'kite', pl: 'latawiec', emoji: '🪁', cat: 'toys' },
-  { en: 'robot', pl: 'robot', emoji: '🤖', cat: 'toys' },
-  { en: 'doll', pl: 'lalka', emoji: '🪆', cat: 'toys' },
-  { en: 'balloon', pl: 'balon', emoji: '🎈', cat: 'toys' },
-  { en: 'present', pl: 'prezent', emoji: '🎁', cat: 'toys' },
-  { en: 'drum', pl: 'bęben', emoji: '🥁', cat: 'toys' },
-  { en: 'guitar', pl: 'gitara', emoji: '🎸', cat: 'toys' },
-  { en: 'puzzle', pl: 'puzzle', emoji: '🧩', cat: 'toys' },
-  { en: 'dice', pl: 'kostka do gry', emoji: '🎲', cat: 'toys' },
-
-  // Jedzenie
-  { en: 'bread', pl: 'chleb', emoji: '🍞', cat: 'food' },
-  { en: 'cheese', pl: 'ser', emoji: '🧀', cat: 'food' },
-  { en: 'egg', pl: 'jajko', emoji: '🥚', cat: 'food' },
-  { en: 'milk', pl: 'mleko', emoji: '🥛', cat: 'food' },
-  { en: 'water', pl: 'woda', emoji: '💧', cat: 'food' },
-  { en: 'juice', pl: 'sok', emoji: '🧃', cat: 'food' },
-  { en: 'tea', pl: 'herbata', emoji: '🍵', cat: 'food' },
-  { en: 'cake', pl: 'tort', emoji: '🎂', cat: 'food' },
-  { en: 'pizza', pl: 'pizza', emoji: '🍕', cat: 'food' },
-  { en: 'soup', pl: 'zupa', emoji: '🍲', cat: 'food' },
-  { en: 'sandwich', pl: 'kanapka', emoji: '🥪', cat: 'food' },
-  { en: 'chocolate', pl: 'czekolada', emoji: '🍫', cat: 'food' },
-  { en: 'butter', pl: 'masło', emoji: '🧈', cat: 'food' },
-  { en: 'honey', pl: 'miód', emoji: '🍯', cat: 'food' },
-  { en: 'cookie', pl: 'ciastko', emoji: '🍪', cat: 'food' },
-  { en: 'rice', pl: 'ryż', emoji: '🍚', cat: 'food' },
-  { en: 'sweets', pl: 'cukierki', emoji: '🍬', cat: 'food' },
-  { en: 'chips', pl: 'frytki', emoji: '🍟', cat: 'food' },
-
-  // Ubrania
-  { en: 'shirt', pl: 'koszulka', emoji: '👕', cat: 'clothes' },
-  { en: 'dress', pl: 'sukienka', emoji: '👗', cat: 'clothes' },
-  { en: 'hat', pl: 'kapelusz', emoji: '👒', cat: 'clothes' },
-  { en: 'cap', pl: 'czapka z daszkiem', emoji: '🧢', cat: 'clothes' },
-  { en: 'shoes', pl: 'buty', emoji: '👟', cat: 'clothes' },
-  { en: 'boots', pl: 'kozaki', emoji: '👢', cat: 'clothes' },
-  { en: 'socks', pl: 'skarpetki', emoji: '🧦', cat: 'clothes' },
-  { en: 'coat', pl: 'płaszcz', emoji: '🧥', cat: 'clothes' },
-  { en: 'jeans', pl: 'dżinsy', emoji: '👖', cat: 'clothes' },
-  { en: 'shorts', pl: 'szorty', emoji: '🩳', cat: 'clothes' },
-  { en: 'scarf', pl: 'szalik', emoji: '🧣', cat: 'clothes' },
-  { en: 'gloves', pl: 'rękawiczki', emoji: '🧤', cat: 'clothes' },
-  { en: 'glasses', pl: 'okulary', emoji: '👓', cat: 'clothes' },
-
-  // Pogoda i niebo
-  { en: 'sun', pl: 'słońce', emoji: '☀️', cat: 'weather' },
-  { en: 'rain', pl: 'deszcz', emoji: '🌧️', cat: 'weather' },
-  { en: 'snow', pl: 'śnieg', emoji: '❄️', cat: 'weather' },
-  { en: 'cloud', pl: 'chmura', emoji: '☁️', cat: 'weather' },
-  { en: 'wind', pl: 'wiatr', emoji: '🌬️', cat: 'weather' },
-  { en: 'rainbow', pl: 'tęcza', emoji: '🌈', cat: 'weather' },
-  { en: 'storm', pl: 'burza', emoji: '⛈️', cat: 'weather' },
-  { en: 'fog', pl: 'mgła', emoji: '🌫️', cat: 'weather' },
-  { en: 'umbrella', pl: 'parasol', emoji: '☂️', cat: 'weather' },
-  { en: 'snowman', pl: 'bałwan', emoji: '⛄', cat: 'weather' },
-  { en: 'moon', pl: 'księżyc', emoji: '🌙', cat: 'weather' },
-  { en: 'star', pl: 'gwiazda', emoji: '⭐', cat: 'weather' },
-  { en: 'hot', pl: 'gorąco', emoji: '🥵', cat: 'weather' },
-  { en: 'cold', pl: 'zimno', emoji: '🥶', cat: 'weather' },
-
-  // Dzikie zwierzęta
-  { en: 'bear', pl: 'niedźwiedź', emoji: '🐻', cat: 'wild' },
-  { en: 'lion', pl: 'lew', emoji: '🦁', cat: 'wild' },
-  { en: 'tiger', pl: 'tygrys', emoji: '🐯', cat: 'wild' },
-  { en: 'monkey', pl: 'małpa', emoji: '🐵', cat: 'wild' },
-  { en: 'elephant', pl: 'słoń', emoji: '🐘', cat: 'wild' },
-  { en: 'giraffe', pl: 'żyrafa', emoji: '🦒', cat: 'wild' },
-  { en: 'zebra', pl: 'zebra', emoji: '🦓', cat: 'wild' },
-  { en: 'snake', pl: 'wąż', emoji: '🐍', cat: 'wild' },
-  { en: 'crocodile', pl: 'krokodyl', emoji: '🐊', cat: 'wild' },
-  { en: 'owl', pl: 'sowa', emoji: '🦉', cat: 'wild' },
-  { en: 'fox', pl: 'lis', emoji: '🦊', cat: 'wild' },
-  { en: 'wolf', pl: 'wilk', emoji: '🐺', cat: 'wild' },
-  { en: 'panda', pl: 'panda', emoji: '🐼', cat: 'wild' },
-  { en: 'penguin', pl: 'pingwin', emoji: '🐧', cat: 'wild' },
-  { en: 'turtle', pl: 'żółw', emoji: '🐢', cat: 'wild' },
-  { en: 'bee', pl: 'pszczoła', emoji: '🐝', cat: 'wild' },
-  { en: 'butterfly', pl: 'motyl', emoji: '🦋', cat: 'wild' },
-  { en: 'spider', pl: 'pająk', emoji: '🕷️', cat: 'wild' },
-  { en: 'snail', pl: 'ślimak', emoji: '🐌', cat: 'wild' },
-  { en: 'whale', pl: 'wieloryb', emoji: '🐳', cat: 'wild' },
-  { en: 'dolphin', pl: 'delfin', emoji: '🐬', cat: 'wild' },
-  { en: 'shark', pl: 'rekin', emoji: '🦈', cat: 'wild' },
-  { en: 'octopus', pl: 'ośmiornica', emoji: '🐙', cat: 'wild' },
-
-  // Dom
-  { en: 'house', pl: 'dom', emoji: '🏠', cat: 'home' },
-  { en: 'door', pl: 'drzwi', emoji: '🚪', cat: 'home' },
-  { en: 'window', pl: 'okno', emoji: '🪟', cat: 'home' },
-  { en: 'bed', pl: 'łóżko', emoji: '🛏️', cat: 'home' },
-  { en: 'chair', pl: 'krzesło', emoji: '🪑', cat: 'home' },
-  { en: 'sofa', pl: 'kanapa', emoji: '🛋️', cat: 'home' },
-  { en: 'bath', pl: 'wanna', emoji: '🛁', cat: 'home' },
-  { en: 'shower', pl: 'prysznic', emoji: '🚿', cat: 'home' },
-  { en: 'toilet', pl: 'toaleta', emoji: '🚽', cat: 'home' },
-  { en: 'key', pl: 'klucz', emoji: '🔑', cat: 'home' },
-  { en: 'clock', pl: 'zegar', emoji: '⏰', cat: 'home' },
-  { en: 'phone', pl: 'telefon', emoji: '📱', cat: 'home' },
-  { en: 'cup', pl: 'kubek', emoji: '☕', cat: 'home' },
-  { en: 'spoon', pl: 'łyżka', emoji: '🥄', cat: 'home' },
-  { en: 'knife', pl: 'nóż', emoji: '🔪', cat: 'home' },
-  { en: 'plate', pl: 'talerz', emoji: '🍽️', cat: 'home' },
-  { en: 'toothbrush', pl: 'szczoteczka do zębów', emoji: '🪥', cat: 'home' },
-
-  // Szkoła
-  { en: 'school', pl: 'szkoła', emoji: '🏫', cat: 'school' },
-  { en: 'teacher', pl: 'nauczyciel', emoji: '🧑‍🏫', cat: 'school' },
-  { en: 'book', pl: 'książka', emoji: '📕', cat: 'school' },
-  { en: 'notebook', pl: 'zeszyt', emoji: '📒', cat: 'school' },
-  { en: 'pen', pl: 'długopis', emoji: '🖊️', cat: 'school' },
-  { en: 'pencil', pl: 'ołówek', emoji: '✏️', cat: 'school' },
-  { en: 'crayon', pl: 'kredka', emoji: '🖍️', cat: 'school' },
-  { en: 'ruler', pl: 'linijka', emoji: '📏', cat: 'school' },
-  { en: 'scissors', pl: 'nożyczki', emoji: '✂️', cat: 'school' },
-  { en: 'backpack', pl: 'plecak', emoji: '🎒', cat: 'school' },
-  { en: 'paper', pl: 'papier', emoji: '📄', cat: 'school' },
-  { en: 'computer', pl: 'komputer', emoji: '💻', cat: 'school' },
-  { en: 'map', pl: 'mapa', emoji: '🗺️', cat: 'school' },
-  { en: 'globe', pl: 'globus', emoji: '🌍', cat: 'school' },
-  { en: 'bell', pl: 'dzwonek', emoji: '🔔', cat: 'school' },
-
-  // Pojazdy
-  { en: 'car', pl: 'samochód', emoji: '🚗', cat: 'transport' },
-  { en: 'bus', pl: 'autobus', emoji: '🚌', cat: 'transport' },
-  { en: 'train', pl: 'pociąg', emoji: '🚂', cat: 'transport' },
-  { en: 'plane', pl: 'samolot', emoji: '✈️', cat: 'transport' },
-  { en: 'boat', pl: 'łódka', emoji: '⛵', cat: 'transport' },
-  { en: 'ship', pl: 'statek', emoji: '🚢', cat: 'transport' },
-  { en: 'bike', pl: 'rower', emoji: '🚲', cat: 'transport' },
-  { en: 'helicopter', pl: 'helikopter', emoji: '🚁', cat: 'transport' },
-  { en: 'rocket', pl: 'rakieta', emoji: '🚀', cat: 'transport' },
-  { en: 'taxi', pl: 'taksówka', emoji: '🚕', cat: 'transport' },
-  { en: 'tractor', pl: 'traktor', emoji: '🚜', cat: 'transport' },
-  { en: 'truck', pl: 'ciężarówka', emoji: '🚚', cat: 'transport' },
-  { en: 'scooter', pl: 'hulajnoga', emoji: '🛴', cat: 'transport' },
-  { en: 'ambulance', pl: 'karetka', emoji: '🚑', cat: 'transport' },
-
-  // Czynności (głównie ruch)
-  { en: 'run', pl: 'biegać', emoji: '🏃', cat: 'verbs' },
-  { en: 'walk', pl: 'chodzić', emoji: '🚶', cat: 'verbs' },
-  { en: 'jump', pl: 'skakać', emoji: '🦘', cat: 'verbs' },
-  { en: 'swim', pl: 'pływać', emoji: '🏊', cat: 'verbs' },
-  { en: 'dance', pl: 'tańczyć', emoji: '💃', cat: 'verbs' },
-  { en: 'climb', pl: 'wspinać się', emoji: '🧗', cat: 'verbs' },
-  { en: 'ride', pl: 'jeździć (na rowerze)', emoji: '🚴', cat: 'verbs' },
-  { en: 'ski', pl: 'jeździć na nartach', emoji: '⛷️', cat: 'verbs' },
-  { en: 'surf', pl: 'surfować', emoji: '🏄', cat: 'verbs' },
-  { en: 'fly', pl: 'latać', emoji: '🕊️', cat: 'verbs' },
-  { en: 'sleep', pl: 'spać', emoji: '😴', cat: 'verbs' },
-  { en: 'eat', pl: 'jeść', emoji: '😋', cat: 'verbs' },
-  { en: 'drink', pl: 'pić', emoji: '🥤', cat: 'verbs' },
-  { en: 'read', pl: 'czytać', emoji: '📖', cat: 'verbs' },
-  { en: 'write', pl: 'pisać', emoji: '✍️', cat: 'verbs' },
-  { en: 'sing', pl: 'śpiewać', emoji: '🎤', cat: 'verbs' },
-  { en: 'paint', pl: 'malować', emoji: '🎨', cat: 'verbs' },
-  { en: 'cook', pl: 'gotować', emoji: '🧑‍🍳', cat: 'verbs' },
-  { en: 'play', pl: 'grać', emoji: '🎮', cat: 'verbs' },
-  { en: 'cry', pl: 'płakać', emoji: '😭', cat: 'verbs' },
-  { en: 'laugh', pl: 'śmiać się', emoji: '😂', cat: 'verbs' },
-  { en: 'clap', pl: 'klaskać', emoji: '👏', cat: 'verbs' },
-  { en: 'wave', pl: 'machać', emoji: '👋', cat: 'verbs' },
+  // Rzeczy w domu
+  { en: 'bed', pl: 'łóżko', emoji: '🛏️', cat: 'things' },
+  { en: 'fridge', pl: 'lodówka', emoji: '🧊', cat: 'things' },
+  { en: 'clock', pl: 'zegar', emoji: '⏰', cat: 'things' },
+  { en: 'cooker', pl: 'kuchenka', emoji: '🍳', cat: 'things' },
+  { en: 'shower', pl: 'prysznic', emoji: '🚿', cat: 'things' },
+  { en: 'sofa', pl: 'kanapa', emoji: '🛋️', cat: 'things' },
 ];
 
 /* ===== TRYBY I POZIOMY ===== */
@@ -319,23 +64,19 @@ const isSpelling = mode => MODES[mode].input !== 'choice';
 
 // Poziomy: cats = kategorie słówek, mix = waga (procent) każdego rodzaju zadania,
 // maxLen = najdłuższe słowo do pisania (żeby na początku nie było za trudno).
-const CATS_1 = ['animals', 'colors', 'numbers'];
-const CATS_2 = [...CATS_1, 'fruitveg', 'family', 'body', 'toys'];
-const CATS_3 = [...CATS_2, 'numbers2', 'food', 'clothes', 'weather', 'wild'];
-const CATS_4 = [...CATS_3, 'home', 'school', 'transport'];
 const CATS_ALL = Object.keys(CATS);
 const LEVELS = [
-  { need: 0,    name: 'Mały Słuchacz',        desc: 'zwierzątka, kolory, liczby do 10', cats: CATS_1,
+  { need: 0,    name: 'Mały Słuchacz',        desc: 'wybór z 4 – z obrazka i na słuch', cats: CATS_ALL,
     mix: { pic: 50, listen: 50 } },
-  { need: 10,   name: 'Ciekawski Lisek',      desc: 'więcej kategorii, układanie z liter', cats: CATS_2, maxLen: 6,
+  { need: 10,   name: 'Ciekawski Lisek',      desc: 'układanie słów z liter', cats: CATS_ALL, maxLen: 6,
     mix: { pic: 35, listen: 35, letters: 30 } },
-  { need: 30,   name: 'Mistrz Literek',       desc: 'pisownia z klawiatury', cats: CATS_3, maxLen: 8,
+  { need: 30,   name: 'Mistrz Literek',       desc: 'pisownia z klawiatury', cats: CATS_ALL, maxLen: 8,
     mix: { pic: 20, listen: 25, letters: 30, type: 25 } },
-  { need: 60,   name: 'Odkrywca Słów',        desc: 'wpisywanie słowa na słuch', cats: CATS_4,
+  { need: 60,   name: 'Odkrywca Słów',        desc: 'wpisywanie słowa na słuch', cats: CATS_ALL,
     mix: { pic: 15, listen: 15, letters: 20, type: 25, listenType: 25 } },
-  { need: 100,  name: 'Król Słówek',          desc: 'wszystkie kategorie i tryby', cats: CATS_ALL,
+  { need: 100,  name: 'Król Słówek',          desc: 'wszystkie tryby', cats: CATS_ALL,
     mix: { pic: 10, listen: 10, letters: 15, type: 20, listenType: 25, picType: 20 } },
-  { need: 1000, name: 'Legenda Angielskiego', desc: 'wszystkie kategorie i tryby', cats: CATS_ALL,
+  { need: 1000, name: 'Legenda Angielskiego', desc: 'wszystkie tryby', cats: CATS_ALL,
     mix: { pic: 5, listen: 5, letters: 10, type: 20, listenType: 30, picType: 30 } },
 ];
 
@@ -452,7 +193,8 @@ function shuffle(arr) {
   return a;
 }
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const norm = s => String(s).trim().toLowerCase();
+const norm = s => String(s).trim().toLowerCase().replace(/\s+/g, ' ');
+const letterCount = en => en.replace(/ /g, '').length;
 const MEDALS = ['🥇', '🥈', '🥉'];
 const plural = (n, one, few, many) => n === 1 ? one : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? few : many;
 const wordByEn = en => WORDS.find(w => w.en === en);
@@ -810,9 +552,10 @@ function makeTask() {
     task.options = shuffle([word, ...others.slice(0, 3)]);
   }
   if (MODES[mode].input === 'letters') {
-    const letters = [...word.en];
+    // Spacja (np. „living room”) nie jest kafelkiem – w slotach jest stałą przerwą.
+    const letters = [...word.en.replace(/ /g, '')];
     let mixed;
-    do { mixed = shuffle(letters); } while (letters.length > 1 && mixed.join('') === word.en && new Set(letters).size > 1);
+    do { mixed = shuffle(letters); } while (mixed.join('') === letters.join('') && new Set(letters).size > 1);
     task.tiles = mixed.map(ch => ({ ch, used: false }));
   }
   return task;
@@ -913,10 +656,13 @@ function renderLetters() {
   $('letters').innerHTML = tiles.map((t, i) =>
     `<button class="letter ${t.used ? 'used' : ''}" data-tile="${i}">${esc(t.ch)}</button>`
   ).join('') + '<button class="letter del" data-tile="del" aria-label="Usuń literkę">⌫</button>';
-  $('task-slots').innerHTML = [...word.en].map((_, i) => {
-    const idx = game.picked[i];
+  $('task-slots').classList.toggle('long', word.en.length > 8);
+  let k = 0; // numer literki (bez spacji)
+  $('task-slots').innerHTML = [...word.en].map(c => {
+    if (c === ' ') return '<span class="slot-gap"></span>';
+    const idx = game.picked[k];
     const ch = idx === undefined ? '' : tiles[idx].ch;
-    return `<span class="slot ${i < game.fixed ? 'fixed' : ''}">${esc(ch)}</span>`;
+    return `<span class="slot ${k++ < game.fixed ? 'fixed' : ''}">${esc(ch)}</span>`;
   }).join('');
 }
 
@@ -937,8 +683,10 @@ function pickTile(i) {
   }
   $('task').classList.remove('wrong');
   renderLetters();
-  if (game.picked.length === word.en.length) {
-    checkAnswer(game.picked.map(idx => tiles[idx].ch).join(''));
+  if (game.picked.length === letterCount(word.en)) {
+    // Wstaw ułożone literki w miejsca liter, zachowując spacje słowa.
+    const picked = game.picked.map(idx => tiles[idx].ch);
+    checkAnswer([...word.en].map(c => c === ' ' ? ' ' : picked.shift()).join(''));
   }
 }
 
@@ -967,7 +715,7 @@ function buildQwerty() {
              `<button class="qkey wide ok" data-q="ok" aria-label="Sprawdź">✔</button>`;
     }
     return `<div class="qrow">${keys}</div>`;
-  }).join('');
+  }).join('') + '<div class="qrow"><button class="qkey space" data-q=" " aria-label="Spacja">spacja</button></div>';
 }
 
 function renderTyped() {
@@ -981,6 +729,7 @@ function typeKey(key) {
     return;
   }
   if (key === 'del') game.input = game.input.slice(0, -1);
+  else if (key === ' ' && (!game.input || game.input.endsWith(' '))) return; // bez spacji na początku i podwójnych
   else if (game.input.length < 16) game.input += key;
   else return;
   sound.tap();
@@ -1102,7 +851,8 @@ function showCorrectAnswer() {
     const i = game.task.options.findIndex(w => w.en === word.en);
     $('options').querySelector(`[data-opt="${i}"]`).classList.add('right');
   } else if (input === 'letters') {
-    $('task-slots').innerHTML = [...word.en].map(ch => `<span class="slot">${esc(ch)}</span>`).join('');
+    $('task-slots').innerHTML = [...word.en].map(ch =>
+      ch === ' ' ? '<span class="slot-gap"></span>' : `<span class="slot">${esc(ch)}</span>`).join('');
   } else {
     game.input = word.en;
     renderTyped();
@@ -1149,10 +899,15 @@ function useHint() {
     $('bubble').textContent = `Słowo zaczyna się na „${word.en[0]}”!`;
   } else {
     // Pokaż pierwszą literę i liczbę liter: c _ _
-    const pattern = word.en[0] + ' ' + Array(word.en.length - 1).fill('_').join(' ');
+    // Wyrazy oddzielone szerszą przerwą: d _ _ _ _ _   r _ _ _ → tu tylko pierwsza litera całego słowa.
+    const pattern = word.en.split(' ')
+      .map((part, i) => [...part].map((c, j) => i === 0 && j === 0 ? c : '_').join(' '))
+      .join('\u00a0\u00a0\u00a0');
     $('task-pattern').textContent = pattern;
     $('task-pattern').hidden = false;
-    $('bubble').textContent = `${word.en.length} ${plural(word.en.length, 'literka', 'literki', 'literek')}, pierwsza to „${word.en[0]}”!`;
+    const n = letterCount(word.en);
+    const words = word.en.includes(' ') ? ' (2 wyrazy)' : '';
+    $('bubble').textContent = `${n} ${plural(n, 'literka', 'literki', 'literek')}${words}, pierwsza to „${word.en[0]}”!`;
   }
 }
 
@@ -1415,13 +1170,19 @@ $('summary-words').addEventListener('click', e => {
   if (btn) say(btn.dataset.say);
 });
 
-// Klawiatura fizyczna: litery, Backspace, Enter, 1–4 przy wyborze, spacja = posłuchaj.
+// Klawiatura fizyczna: litery, Backspace, Enter, 1–4 przy wyborze,
+// spacja = posłuchaj (przy wpisywaniu słowa – zwykła spacja).
 document.addEventListener('keydown', e => {
   if (!game || !$('screen-game').classList.contains('active') || modalOpen()) return;
   if (e.ctrlKey || e.metaKey || e.altKey) return;
   const input = MODES[game.task.mode].input;
   const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
 
+  if (key === ' ' && input === 'keyboard') {
+    e.preventDefault();
+    typeKey(' ');
+    return;
+  }
   if (key === ' ') {
     e.preventDefault();
     if (MODES[game.task.mode].speak) say(game.task.word.en);
@@ -1455,6 +1216,8 @@ function normalizePlayer(p) {
   for (const key of Object.keys(base)) {
     if (p[key] === undefined || (p[key] === null && key !== 'avatar')) p[key] = base[key];
   }
+  // Usuń pomyłki w słówkach, których nie ma już w banku.
+  for (const en of Object.keys(p.mistakes)) if (!wordByEn(en)) delete p.mistakes[en];
   return p;
 }
 

@@ -13,7 +13,7 @@ Service worker działa tylko przez `http://localhost` albo HTTPS.
 
 ## Pliki
 
-- `app.js` – bank słówek (`WORDS`), poziomy (`LEVELS`), tryby, nagrody, odznaki, zwierzaki
+- `app.js` – bank słówek (`WORDS`, obecnie Picture Dictionary – Unit 1), poziomy (`LEVELS`), tryby, nagrody, odznaki, zwierzaki
 - `db.js` – gracze w IndexedDB
 - `sw.js` – offline (najpierw sieć, potem cache). **Podbij `CACHE` przy każdej zmianie plików.**
 - `gifs/` – zwierzaki-awatary (te same co w Odejmowanku)
