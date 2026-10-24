@@ -48,14 +48,14 @@ const WORDS = [
 // Rodzaje zadań:
 //  pic        – obrazek → wybór słowa z 4
 //  picType    – obrazek → wpisz słowo
-//  listen     – lektor → wybór obrazka z 4
+//  listen     – lektor → wybór napisanego słowa z 4
 //  listenType – lektor → wpisz usłyszane słowo
 //  letters    – obrazek + po polsku → ułóż z rozsypanych liter
 //  type       – obrazek + po polsku → wpisz z klawiatury
 const MODES = {
   pic:        { input: 'choice',  speak: false, bubble: 'Jak to jest po angielsku?' },
   picType:    { input: 'keyboard', speak: false, bubble: 'Napisz po angielsku, co widzisz!' },
-  listen:     { input: 'choice',  speak: true,  bubble: 'Posłuchaj i wybierz obrazek!' },
+  listen:     { input: 'choice',  speak: true,  bubble: 'Posłuchaj i wybierz słowo!' },
   listenType: { input: 'keyboard', speak: true,  bubble: 'Posłuchaj i napisz to słowo!' },
   letters:    { input: 'letters', speak: true,  bubble: 'Ułóż słowo z literek!' },
   type:       { input: 'keyboard', speak: true,  bubble: 'Napisz to po angielsku!' },
@@ -627,11 +627,10 @@ function updateStreak() {
 
 /* ===== GRA – WYBÓR Z 4 ===== */
 
+// Odpowiedzi zawsze jako napisane słowa (obrazki-emoji bywały mylące).
 function renderOptions() {
-  const { mode, options } = game.task;
-  const pics = mode === 'listen';
-  $('options').innerHTML = options.map((w, i) =>
-    `<button class="option ${pics ? 'pic' : ''}" data-opt="${i}" aria-label="${pics ? 'Obrazek ' + (i + 1) : esc(w.en)}">${pics ? picHtml(w) : esc(w.en)}</button>`
+  $('options').innerHTML = game.task.options.map((w, i) =>
+    `<button class="option" data-opt="${i}">${esc(w.en)}</button>`
   ).join('');
 }
 

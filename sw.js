@@ -3,7 +3,7 @@
 /* ===== SERVICE WORKER ===== */
 // Zapisuje wszystkie pliki (łącznie z GIF-ami) w pamięci podręcznej, żeby gra działała offline.
 // Przy każdej zmianie plików podbij numer wersji!
-const CACHE = 'slowkowo-v2';
+const CACHE = 'slowkowo-v3';
 const FILES = [
   './',
   './index.html',

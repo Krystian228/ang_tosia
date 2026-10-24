@@ -526,7 +526,6 @@ h2 { font-size: 2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--primary
   transition: opacity .3s, background .2s;
 }
 .option:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,.15); }
-.option.pic { font-size: 3.4rem; min-height: 110px; line-height: 1; }
 .option.wrong { background: #ffe1e1; color: var(--bad); animation: shake .4s ease; }
 .option.right { background: var(--good); color: #fff; box-shadow: 0 6px 0 #00826a; }
 .option.gone { opacity: .2; pointer-events: none; }
@@ -589,7 +588,6 @@ h2 { font-size: 2rem; margin: 0; color: #fff; text-shadow: 0 3px 0 var(--primary
   .task-pic { font-size: 4rem; }
   .task { padding: 12px; gap: 6px; }
   .option { min-height: 62px; font-size: 1.3rem; }
-  .option.pic { min-height: 86px; font-size: 2.8rem; }
   .qkey { height: 46px; }
   .mascot.big { font-size: 4rem; }
 }
